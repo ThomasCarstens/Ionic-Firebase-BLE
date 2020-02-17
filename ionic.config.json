@@ -1,0 +1,7 @@
+{
+  "name": "ionic-firebaas",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
