@@ -9,7 +9,15 @@ const routes: Routes = [
     path: 'details/:id',
     loadChildren: () => import('./pages/todo-details/todo-details.module').then( m => m.TodoDetailsPageModule)
   },
-  { path: 'details', loadChildren: () => import('./pages/todo-details/todo-details.module').then( m => m.TodoDetailsPageModule)}
+  { path: 'details', loadChildren: () => import('./pages/todo-details/todo-details.module').then( m => m.TodoDetailsPageModule)},
+  {
+    path: 'ble-details',
+    loadChildren: () => import('./ble-details/ble-details.module').then( m => m.BleDetailsPageModule)
+  },
+  {
+    path: 'webfeed',
+    loadChildren: () => import('./webfeed/webfeed.module').then( m => m.WebfeedPageModule)
+  }
 ];
 
 @NgModule({

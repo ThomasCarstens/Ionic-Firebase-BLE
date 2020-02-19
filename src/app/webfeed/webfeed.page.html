@@ -1,0 +1,228 @@
+<ion-header color="danger">
+
+  <ion-buttons left>
+    <button ion-button icon-only clear (click)="logout()">
+      <ion-icon name="log-out"></ion-icon>
+    </button>
+  </ion-buttons>
+
+    <ion-title>Your Feed</ion-title>
+
+    <ion-buttons end>
+      <button item-left ion-button icon-only clear > <!--(click)="this.popup.HowtoContribute()"-->
+        <ion-icon name="bonfire"></ion-icon>
+      </button>
+    </ion-buttons>
+
+</ion-header>
+
+<ion-content overflow-scroll=true>
+
+
+  <p class="fineprint"><button class="fineprint"> <!--(click)="tgotoCodesign()"-->
+  Contact Developer
+  </button> || <a target="_blank" href="http://htmlpreview.github.io/?https://github.com/ThomasCarstens/uct_incubator/blob/master/privacypolicy"> Private Policy </a> </p>
+
+
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!--<ion-textarea rows="1" id="messageInputBox" placeholder="Send message" (input)="change()" required></ion-textarea>-->
+
+
+  <!--
+      <ion-item margin class="rowStyle" justify-content=center>
+      <button ion-button icon-only color="danger" clear (click)="addPhoto()">
+        <ion-icon name="images"></ion-icon>
+      </button>
+
+      <textarea type="text" placeholder="Say something..." [(ngModel)]="text"></textarea>
+
+      <button ion-button icon-only color="danger" clear (click)="post()">
+        <ion-icon name="send"></ion-icon>
+      </button>
+    </ion-item>
+  -->
+
+<ng-container *ngFor="let post of posts">
+
+
+<ion-card *ngIf='post.data().resolve==0'>
+
+                <ion-item textwrap color="danger">
+
+                  <div color="danger" item-left *ngIf='post.data().resolve==0' > Unresolved </div>
+                  <div color="danger" item-left *ngIf='post.data().resolve==1'> Resolved </div>
+
+                  <ion-icon item-right name="ionitron"> </ion-icon>
+                  <div item-right *ngIf="post.data().anonymous==true">
+                     Student </div>
+                  <div item-right *ngIf="post.data().anonymous==false">
+                     {{ post.data().owner_name }} </div>
+
+            </ion-item>
+
+                <div class="katex-display" text-wrap > <!--[Katex]="post.data().text" -->
+                  {{ post.data().text }}
+                </div>
+
+                <img [src]="post.data().image" *ngIf="post.data().image" (click)="ViewPhoto(post.data().image)">
+
+                <ion-row class="bottom-bar">
+
+                  <ion-col>
+                    <div block *ngIf='post.data().worksection' class="fineprint"> {{post.data().worksection}} </div>
+                    <button block ion-button small color="danger" *ngIf='!post.data().worksection' (click)="editPost(post)"> Uncategorised </button>
+                  </ion-col>
+
+
+                  <ion-col>
+                    <button block ion-button *ngIf='this.usertype == "Tutor" || this.username == post.data().owner_email' clear small color="danger" (click)="settings(post)">
+                      <ion-icon name="settings"></ion-icon>
+                    </button>
+                  </ion-col>
+
+                  <ion-col>
+                    <button ion-button block icon-left clear small color="danger" class="border-right" (click)="like(post)">
+                      <ion-icon name="thumbs-up"></ion-icon>
+                      <small>{{ post.data().likesCount || 0 }} Likes</small>
+                    </button>
+                  </ion-col>
+
+                </ion-row>
+
+
+                <ion-row class="bottom-bar">
+                  <ion-col>
+                    <button ion-button block icon-left clear small color="danger" class="border-right" (click)="comment(post)">
+                      <ion-icon name="text"></ion-icon>
+                      <small>{{ post.data().commentsCount || 0 }} Comments</small>
+                    </button>
+                  </ion-col>
+
+
+                  <ion-col>
+                    <button ion-button block icon-left clear small color="danger">
+                      <small>{{ ago(post.data().created.toDate()) }} ago</small>
+                    </button>
+                  </ion-col>
+
+                </ion-row>
+
+  </ion-card>
+
+
+  <ion-card *ngIf='post.data().resolve==1'>
+
+                  <ion-item textwrap color="danger">
+
+                    <div color="danger" item-left *ngIf='post.data().resolve==0' > Unresolved </div>
+                    <div color="danger" item-left *ngIf='post.data().resolve==1'> Resolved </div>
+
+                    <ion-icon item-right name="ionitron"> </ion-icon>
+                    <div item-right *ngIf="post.data().anonymous==true">
+                       Student </div>
+                    <div item-right *ngIf="post.data().anonymous==false">
+                       {{ post.data().owner_name }} </div>
+
+              </ion-item>
+
+                  <ion-item class="katex-display" text-wrap> <!--[Katex]="post.data().text"-->
+                    {{ post.data().text }}
+                  </ion-item>
+
+                  <img class="image" [src]="post.data().image" *ngIf="post.data().image" (click)="ViewPhoto(post.data().image)">
+
+                  <ion-row class="bottom-bar">
+
+                    <ion-col>
+                      <div block *ngIf='post.data().worksection' class="fineprint"> {{post.data().worksection}} </div>
+                      <button block ion-button small color="danger" *ngIf='!post.data().worksection' (click)="editPost(post)"> Uncategorised </button>
+                    </ion-col>
+
+
+                    <ion-col>
+                      <button block ion-button *ngIf='this.usertype == "Tutor" || this.username == post.data().owner_email' clear small color="danger" (click)="settings(post)">
+                        <ion-icon name="settings"></ion-icon>
+                      </button>
+                    </ion-col>
+
+                  </ion-row>
+
+
+                  <ion-row class="bottom-bar">
+                    <ion-col>
+                      <button ion-button block icon-left clear small color="danger" class="border-right" (click)="comment(post)">
+                        <ion-icon name="text"></ion-icon>
+                        <small>{{ post.data().commentsCount || 0 }} Comments</small>
+                      </button>
+                    </ion-col>
+
+
+                    <ion-col>
+                      <button ion-button block icon-left clear small color="danger">
+                        <small>{{ ago(post.data().created.toDate()) }} ago</small>
+                      </button>
+                    </ion-col>
+
+                  </ion-row>
+
+    </ion-card>
+
+
+</ng-container>
+
+  <ion-infinite-scroll (ionInfinite)="loadMorePosts($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>
+
+
+<ion-footer>
+  <div class="item profilepic-border" align="center" *ngIf="image">
+  	<button class="profilebutton" (click)="removePhoto()">
+      <ion-icon name="close-circle"></ion-icon>
+    </button>
+  	<img class="profilepic padding-bottom" [src]="image">
+  </div>
+    <div> <a target="_blank" href="https://katex.org/docs/supported.html"> How to type Latex equations </a> </div>
+    <ion-item class= "katex-display" autosize text-wrap></ion-item> <!--[Katex]="text"-->
+
+
+    <ion-row margin class="rowStyle">
+      <button ion-button item-left color="danger" clear (click)="addPhoto()">
+        <ion-icon name="images"></ion-icon>
+      </button>
+
+      <ion-textarea rows="1" name="dummyText"  type="text" placeholder="Say something..." [(ngModel)]="text" autosize></ion-textarea>
+
+      <button ion-button icon-right  color="danger" clear (click)="PreparePost()">
+        <ion-icon name="send"></ion-icon>
+      </button>
+  </ion-row>
+
+</ion-footer>
+
+<!--LIKES REMOVED.
+<ion-col>
+  <button ion-button block icon-left clear small color="danger" class="border-right" (click)="like(post)">
+    <ion-icon name="thumbs-up"></ion-icon>
+    <small>{{ post.data().likesCount || 0 }} Likes</small>
+  </button>
+</ion-col> -->
+
+<!-- <ion-card *ngFor="let User of user">
+<ion-item-divider color="danger" *ngIf="{{ User.data().usertype }} === `Student`">
+    {{ User.data().usertype }}
+</ion-item-divider>
+</ion-card> -->
+
+<!-- IF TABS, later
+<ion-buttons start>
+  <button start ion-button icon-only clear menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+</ion-buttons>
+-->
